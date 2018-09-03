@@ -109,7 +109,7 @@
         	console.log(error);
         });*/
 
-// New way of consuming promises introduced in the ES2017 ( async await)
+// New way of consuming promises introduced in the ES8, or ES2017 ( async await)
 // await can only be used inside an async function. Await stops the function until promise is consumed, but it doesnt matter because async function already
 // runs in the background(asynchronously)
 
@@ -145,7 +145,7 @@
 
 		// We can do this instead
 
-		async function getRecipesAW() {
+		/*async function getRecipesAW() {
         	const IDs = await getIDs;
         	console.log(IDs);
         	const recipe = await getRecipe(IDs[2]);
@@ -157,6 +157,34 @@
 
         }
         getRecipesAW().then(result => console.log(`${result} is the best ever!`)); // this code runs synchronously
+*/
+
+
+		
+		// we prefixed the crossorigin (changeed to cors-anywhere) url in order to fix the cross origin problem. Normally we would channel the request from our server, where cross origin policy doesnt exist.
+		// fetch returns a promise, se we just have to consume it. (the good thing about using 3rd party apis)
+		function getWeather(woeid) {   //woeid means where on earth id
+
+		fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)
+
+		.then(result => {
+			console.log(result);
+			return result.json(); // returns a promise
+		})
+		.then(data => {
+			//console.log(data);
+			const today = data.consolidated_weather[0];
+			console.log(`Temperatures in ${data.title} are between ${today.min_temp} and ${today.max_temp}.`);
+		})
+		.catch(error => console.log(error));
+
+	}
+
+	getWeather(2487956); // id for San Francisco
+	getWeather(44418); // id for London
+	
+
+
 
     </script>
 </body>
