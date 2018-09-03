@@ -54,6 +54,9 @@
 
         //recreating the part from the code above, where we get the ids from the server(fake ajax call)
         //the executor function gets two arguements, the callback functions resolve and reject. Its because it is used to inform the promise if the event it is handling was successful or not. In this case we dont have to use the reject function.
+
+
+    // Producing promises
         const getIDs = new Promise((resolve, reject) => {
         	setTimeout(() => {
         		resolve([45, 346, 23, 56]);
@@ -83,11 +86,13 @@
 
         };
 
+    // Consuming promises    
+
         /*getIDs.then(IDs => {
         	console.log(IDs);
         });*/
 
-        getIDs
+/*        getIDs
         .then(IDs => {
         	console.log(IDs);
         	return getRecipe(IDs[2]);
@@ -102,12 +107,56 @@
 
         .catch(error => {
         	console.log(error);
-        });
+        });*/
+
+// New way of consuming promises introduced in the ES2017 ( async await)
+// await can only be used inside an async function. Await stops the function until promise is consumed, but it doesnt matter because async function already
+// runs in the background(asynchronously)
+
+       /* async function getRecipesAW() {
+        	const IDs = await getIDs;
+        	console.log(IDs);
+        	const recipe = await getRecipe(IDs[2]);
+        	console.log(recipe);
+        	const related = await getRelated('Telis Nikolaou');
+        	console.log(related);
 
 
+        }
+        getRecipesAW(); // this code runs synchronously*/
 
 
+        // the following will not return the recipe because the console.log(rec) below is ran way before the promise is resolved
+         /* async function getRecipesAW() {
+        	const IDs = await getIDs;
+        	console.log(IDs);
+        	const recipe = await getRecipe(IDs[2]);
+        	console.log(recipe);
+        	const related = await getRelated('Telis Nikolaou');
+        	console.log(related);
 
+        	return recipe;
+
+        }
+        const rec = getRecipesAW(); // this code runs synchronously
+        console.log(rec);
+*/
+
+
+		// We can do this instead
+
+		async function getRecipesAW() {
+        	const IDs = await getIDs;
+        	console.log(IDs);
+        	const recipe = await getRecipe(IDs[2]);
+        	console.log(recipe);
+        	const related = await getRelated('Telis Nikolaou');
+        	console.log(related);
+
+        	return recipe;
+
+        }
+        getRecipesAW().then(result => console.log(`${result} is the best ever!`)); // this code runs synchronously
 
     </script>
 </body>
