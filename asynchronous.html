@@ -168,7 +168,7 @@
 		fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)
 
 		.then(result => {
-			console.log(result);
+			//console.log(result);
 			return result.json(); // returns a promise
 		})
 		.then(data => {
@@ -178,13 +178,39 @@
 		})
 		.catch(error => console.log(error));
 
-	}
+		}
 
-	getWeather(2487956); // id for San Francisco
-	getWeather(44418); // id for London
-	
+		getWeather(2487956); // id for San Francisco
+		getWeather(44418); // id for London
+		getWeather(946738); // ATHENS
 
 
+		// ==============    Same thing as above but using async and await =============================
+		async function getWeatherAW(woeid) {
+
+			try{
+
+			 const result = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+			 const data = await result.json();
+			 const tomorrow = data.consolidated_weather[1];
+			 console.log(`Temperatures toworrow in ${data.title} will be between ${tomorrow.min_temp} and ${tomorrow.max_temp}.`);
+
+			 return data;
+
+			} catch(error) {
+				//console.log(error); // or
+				alert(error);
+			}
+		}
+
+		getWeatherAW(2487956); // id for San Francisco
+		let dataLondon;
+		getWeatherAW(44418).then(data => { // London
+			dataLondon = data;
+			console.log(dataLondon);
+		}); 
+		
+		getWeatherAW(946738); // ATHENS
 
     </script>
 </body>
