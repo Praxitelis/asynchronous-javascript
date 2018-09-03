@@ -27,7 +27,7 @@
 
 
 // The following is an example of the so called 'callback hell', which is a callback inside a callback inside a callback and so on.
-        function getRecipe() {
+        /*function getRecipe() {
 
         	setTimeout(() => {
 
@@ -50,7 +50,59 @@
         	}, 1500);
 
         }
-        getRecipe();
+        getRecipe();*/
+
+        //recreating the part from the code above, where we get the ids from the server(fake ajax call)
+        //the executor function gets two arguements, the callback functions resolve and reject. Its because it is used to inform the promise if the event it is handling was successful or not. In this case we dont have to use the reject function.
+        const getIDs = new Promise((resolve, reject) => {
+        	setTimeout(() => {
+        		resolve([45, 346, 23, 56]);
+        	}, 1500);
+
+        });
+
+        const getRecipe = recID => {
+        	return new Promise((resolve, reject) => {
+        		setTimeout(ID => {
+        			const recipe = {title: 'Fresh tomato pasta', publisher: 'Telis'};
+        			resolve(`${ID}: ${recipe.title}`);
+
+        		}, 1500, recID);
+        		
+        	});
+        };
+
+        const getRelated = publisher => {
+        	return new Promise((resolve, reject) => {
+        		setTimeout(pub => {
+        			const recipe = {title: 'Italian Pizza', publisher: 'Telis'};
+        			resolve(`${pub}: ${recipe.title}`);
+        		}, 1500, publisher);
+
+        	});
+
+        };
+
+        /*getIDs.then(IDs => {
+        	console.log(IDs);
+        });*/
+
+        getIDs
+        .then(IDs => {
+        	console.log(IDs);
+        	return getRecipe(IDs[2]);
+        })
+        .then(recipe => {
+        	console.log(recipe);
+        	return getRelated('Telis Nikolaou');
+        })
+        .then(recipe => {
+        	console.log(recipe);
+        })
+
+        .catch(error => {
+        	console.log(error);
+        });
 
 
 
